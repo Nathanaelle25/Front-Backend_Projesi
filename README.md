@@ -1,140 +1,146 @@
-📘 BEUBlog – Full Stack Blog Platformu
-📌 Proje Hakkında
+BEUBlog
 
-BEUBlog, [buraya projenin amacını yaz] amacıyla geliştirilmiş modern bir full-stack blog platformudur.
+Modern, full-stack blog platformu. React frontend ve Node.js/Express backend ile geliştirilmiş, Docker üzerinden kolayca deploy edilebilir.
 
-Proje kapsamında kullanıcıların blog yazıları oluşturabilmesi, düzenleyebilmesi ve yönetebilmesi hedeflenmiştir. Sistem rol tabanlı yetkilendirme ve JWT kimlik doğrulama mekanizması ile güvenli hale getirilmiştir.
-
-🎯 Proje Amacı
-
-Bu projenin temel amacı:
-
-[Amaç 1]
-
-[Amaç 2]
-
-[Amaç 3]
-
-👉 Buraya 3 akademik amaç yazmanı istiyorum.
-Örneğin: full-stack mimariyi öğrenmek, REST API geliştirmek, JWT kullanımı vb.
-
-🛠️ Kullanılan Teknolojiler
+🚀 Teknoloji Yığını
 Frontend
 
-React 18
-
-Vite
+React 18 + Vite
 
 React Router DOM
 
-Axios
+React Quill (WYSIWYG editör)
 
-React Quill
+Axios
 
 Lucide React
 
 Backend
 
-Node.js
+Node.js + Express 5
 
-Express.js
+MongoDB + Mongoose
 
-MongoDB
+JWT kimlik doğrulama
 
-Mongoose
+Multer (dosya yükleme)
 
-JWT (JSON Web Token)
-
-Multer
-
-bcryptjs
+bcryptjs (parola şifreleme)
 
 DevOps
 
-Docker
+Docker & Docker Compose
 
-Docker Compose
-
-Nginx
+Nginx (production frontend sunucusu)
 
 ✨ Özellikler
 
-Kullanıcı kayıt ve giriş sistemi
+Kullanıcı kayıt & giriş (JWT tabanlı)
 
-JWT tabanlı kimlik doğrulama
+Rol tabanlı yetkilendirme (user/admin)
 
-Rol tabanlı yetkilendirme (Admin / Kullanıcı)
+Blog yazısı oluşturma, düzenleme, silme
 
-Blog yazısı oluşturma, düzenleme ve silme
+React Quill ile zengin metin editörü
 
-Kategori yönetimi
+Kategori sistemi (admin yönetimi)
 
 Yazı beğenme sistemi
 
-Admin onaylı içerik moderasyonu
+Admin moderasyon sistemi (yazı onay/askıya alma)
 
-Görsel yükleme desteği
+Dosya yükleme desteği (JPEG, PNG, GIF, WebP, SVG — max 10MB)
 
-Karanlık / Aydınlık tema desteği
+Aydınlık/Karanlık tema desteği
 
-🏗️ Sistem Mimarisi
+Tamamen Türkçe arayüz
 
-Proje iki ana bileşenden oluşmaktadır:
-
-Frontend (Client-Side)
-React tabanlı SPA yapısında geliştirilmiştir. REST API üzerinden backend ile iletişim kurmaktadır.
-
-Backend (Server-Side)
-Express.js ile geliştirilmiş RESTful API servisidir. MongoDB veritabanı ile veri yönetimi sağlanmaktadır.
-
-👉 Sana soru:
-Frontend ile backend arasındaki iletişim hangi protokol üzerinden oluyor? (Tek kelime cevap)
-
-⚙️ Kurulum
-Docker ile Kurulum
+🐳 Kurulum
+1. Docker ile (Önerilen)
+# Repoyu klonla
 git clone <repo-url>
 cd beublog
+
+# JWT secret
 export JWT_SECRET=guclu-bir-secret-key
+
+# Servisleri çalıştır
 docker compose up -d
-Manuel Kurulum
-Backend
+
+Uygulama adresleri:
+
+Frontend: http://localhost
+
+Backend: http://localhost:5000
+
+MongoDB: localhost:27017
+
+2. Manuel Kurulum
+🔧 Backend
 cd backend
 npm install
+
+# .env dosyasını oluştur
+echo "PORT=5000" > .env
+echo "MONGODB_URI=mongodb://localhost:27017/blogdb" >> .env
+echo "JWT_SECRET=guclu-bir-secret-key" >> .env
+
 npm start
-Frontend
+💻 Frontend
 cd frontend
 npm install
 npm run dev
-🔌 API Endpointleri
-Kimlik Doğrulama
-
-POST /api/auth/register
-
-POST /api/auth/login
-
-GET /api/auth/me
-
-Yazılar
-
-GET /api/posts
-
-POST /api/posts
-
-PUT /api/posts/:id
-
-DELETE /api/posts/:id
-
-Kategoriler
-
-GET /api/categories
-
-POST /api/categories
-
 📁 Proje Yapısı
 beublog/
-│
-├── backend/
-├── frontend/
 ├── docker-compose.yml
-📷 Ekran Görüntüleri
+├── backend/
+│   ├── server.js
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── make-admin.js
+│   └── migrate-slugs.js
+└── frontend/
+    └── src/
+        ├── App.jsx
+        ├── api.js
+        ├── context/
+        ├── components/
+        └── pages/
+📡 API Endpointleri
+🔐 Kimlik Doğrulama
+Metot	Endpoint	Açıklama
+POST	/api/auth/register	Yeni kullanıcı kaydı
+POST	/api/auth/login	Giriş yapma
+GET	/api/auth/me	Kullanıcı bilgisi
+PUT	/api/auth/me/profile	Profil güncelleme
+PUT	/api/auth/me/password	Parola değiştirme
+GET	/api/auth/me/posts	Kullanıcının yazıları
+📝 Yazılar
+Metot	Endpoint	Açıklama
+GET	/api/posts	Yazı listesi
+POST	/api/posts	Yeni yazı oluştur
+GET	/api/posts/by-slug/:slug	Slug ile yazı getir
+PUT	/api/posts/:id	Yazı güncelle
+DELETE	/api/posts/:id	Yazı sil
+PUT	/api/posts/:id/like	Yazıyı beğen
+PUT	/api/posts/:id/status	Yazı durum değişikliği (admin)
+📂 Kategoriler
+Metot	Endpoint	Açıklama
+GET	/api/categories	Listele
+POST	/api/categories	Ekle (admin)
+DELETE	/api/categories/:id	Sil (admin)
+🖼️ Dosya Yükleme
+Metot	Endpoint	Açıklama
+POST	/api/upload	Görsel yükle
+🛠️ Yardımcı Scriptler
+# Kullanıcıyı admin yap
+node backend/make-admin.js
 
+# Yazılara slug ekle (migrasyon)
+node backend/migrate-slugs.js
+⚙️ Ortam Değişkenleri
+Değişken	Açıklama	Varsayılan
+PORT	Backend portu	5000
+MONGODB_URI	MongoDB bağlantısı	mongodb://localhost:27017/blogdb
+JWT_SECRET	JWT imza anahtarı	zorunlu
