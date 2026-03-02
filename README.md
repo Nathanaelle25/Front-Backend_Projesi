@@ -1,147 +1,106 @@
-WebProgramlama
-📦 BEUBlog
+BEUBlog – Full-Stack MERN Blog Platform
+A modern, responsive, and fully containerized full-stack blog platform built with the MERN stack (MongoDB, Express, React, Node.js).
 
-Modern, full-stack blog platformu. React frontend ve Node.js/Express backend ile geliştirilmiş, Docker üzerinden kolayca deploy edilebilir.
+This project was developed as part of the Web Programming curriculum at Bitlis Eren University (BEU).
 
-🚀 Teknoloji Yığını
+It features a complete RESTful API, secure JWT authentication, rich text editing, image uploading, and a production-ready Dockerized deployment using Nginx.
+
+✨ Features
+Authentication: Secure user registration and login using JWT (JSON Web Tokens) and bcrypt password hashing.
+Content Management: Full CRUD (Create, Read, Update, Delete) operations for blog posts.
+Rich Text Editing: Integrated react-quill for formatting post content with HTML.
+Image Uploads: Custom backend endpoint using multer to handle and serve cover images.
+Interactivity: Users can "Like" posts and filter content by categories.
+UI/UX: Responsive design built with Tailwind CSS, featuring a persistent Dark/Light mode toggle.
+DevOps Ready: Completely containerized using Docker and Docker Compose, with Nginx serving the frontend and handling routing.
+🛠️ Technology Stack
 Frontend
-
-React 18 + Vite
-
+React 18 (Vite)
 React Router DOM
-
-React Quill (WYSIWYG editör)
-
-Axios
-
+Tailwind CSS
 Lucide React
-
 Backend
+Node.js
+Express.js 5
+Mongoose
+Database
+MongoDB
+Deployment
+Docker
+Docker Compose
+Nginx
+🚀 Quick Start (Docker)
+To run this project locally, you only need to have Docker Desktop installed:
 
-Node.js + Express 5
+https://www.docker.com/products/docker-desktop/
 
-MongoDB + Mongoose
-
-JWT kimlik doğrulama
-
-Multer (dosya yükleme)
-
-bcryptjs (parola şifreleme)
-
-DevOps
-
-Docker & Docker Compose
-
-Nginx (production frontend sunucusu)
-
-✨ Özellikler
-
-Kullanıcı kayıt & giriş (JWT tabanlı)
-
-Rol tabanlı yetkilendirme (user/admin)
-
-Blog yazısı oluşturma, düzenleme, silme
-
-React Quill ile zengin metin editörü
-
-Kategori sistemi (admin yönetimi)
-
-Yazı beğenme sistemi
-
-Admin moderasyon sistemi (yazı onay/askıya alma)
-
-Dosya yükleme desteği (JPEG, PNG, GIF, WebP, SVG — max 10MB)
-
-Aydınlık/Karanlık tema desteği
-
-Tamamen Türkçe arayüz
-
-🐳 Kurulum
-1. Docker ile (Önerilen)
-# Repoyu klonla
-git clone <repo-url>
+1️⃣ Clone the Repository
+git clone https://github.com/FKAV64/BEU_Web_Tabanli_Programlama/tree/main/03-week-3
 cd beublog
-
-# JWT secret
-export JWT_SECRET=guclu-bir-secret-key
-
-# Servisleri çalıştır
-docker compose up -d
-
-Uygulama adresleri:
-
+2️⃣ Start the Application
+docker compose up --build
+🌐 Access the Application
 Frontend: http://localhost
+Backend API: http://localhost:5000
+👑 Admin Setup & Adding Categories
+By default, the MongoDB database is empty upon the first launch.
+Category creation is protected by an adminOnly backend middleware.
 
-Backend: http://localhost:5000
+Follow these steps to create your first admin user and add categories:
 
-MongoDB: localhost:27017
+Step 1: Register and Elevate to Admin
+Go to: http://localhost/register
 
-2. Manuel Kurulum
-🔧 Backend
-cd backend
-npm install
+Create a standard user account.
 
-# .env dosyasını oluştur
-echo "PORT=5000" > .env
-echo "MONGODB_URI=mongodb://localhost:27017/blogdb" >> .env
-echo "JWT_SECRET=guclu-bir-secret-key" >> .env
+Open your terminal in the project root and run:
 
-npm start
-💻 Frontend
-cd frontend
-npm install
-npm run dev
-📁 Proje Yapısı
+docker exec -it beublog-backend node make-admin.js <your-email@example.com>
+⚠️ Important:
+Log out of the web interface and log back in to receive your new Admin JWT token.
+
+Step 2: Add a Category via Browser Console
+Currently, categories are added directly via the API.
+
+While logged in as an admin:
+
+Press F12 (or Right-Click → Inspect).
+Open the Console tab.
+Paste the following code:
+const token = localStorage.getItem('token');
+
+fetch('http://localhost:5000/api/categories', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  },
+  body: JSON.stringify({ 
+    name: 'Software', 
+    slug: 'software', 
+    description: 'All things related to programming and software development.' 
+  })
+})
+.then(res => res.json())
+.then(data => console.log('Category Added:', data))
+.catch(err => console.error('Error:', err));
+You can modify the name, slug, and description fields to create additional categories.
+
+New categories will immediately appear in the Create Post dropdown menu.
+
+🛑 Stopping the Application
+To stop the containers and shut down the Docker network:
+
+docker compose down
+📁 Project Structure (High-Level)
 beublog/
+│
+├── frontend/        # React (Vite) application
+├── backend/         # Express REST API
+├── nginx/           # Reverse proxy configuration
 ├── docker-compose.yml
-├── backend/
-│   ├── server.js
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── make-admin.js
-│   └── migrate-slugs.js
-└── frontend/
-    └── src/
-        ├── App.jsx
-        ├── api.js
-        ├── context/
-        ├── components/
-        └── pages/
-📡 API Endpointleri
-🔐 Kimlik Doğrulama
-Metot	Endpoint	Açıklama
-POST	/api/auth/register	Yeni kullanıcı kaydı
-POST	/api/auth/login	Giriş yapma
-GET	/api/auth/me	Kullanıcı bilgisi
-PUT	/api/auth/me/profile	Profil güncelleme
-PUT	/api/auth/me/password	Parola değiştirme
-GET	/api/auth/me/posts	Kullanıcının yazıları
-📝 Yazılar
-Metot	Endpoint	Açıklama
-GET	/api/posts	Yazı listesi
-POST	/api/posts	Yeni yazı oluştur
-GET	/api/posts/by-slug/:slug	Slug ile yazı getir
-PUT	/api/posts/:id	Yazı güncelle
-DELETE	/api/posts/:id	Yazı sil
-PUT	/api/posts/:id/like	Yazıyı beğen
-PUT	/api/posts/:id/status	Yazı durum değişikliği (admin)
-📂 Kategoriler
-Metot	Endpoint	Açıklama
-GET	/api/categories	Listele
-POST	/api/categories	Ekle (admin)
-DELETE	/api/categories/:id	Sil (admin)
-🖼️ Dosya Yükleme
-Metot	Endpoint	Açıklama
-POST	/api/upload	Görsel yükle
-🛠️ Yardımcı Scriptler
-# Kullanıcıyı admin yap
-node backend/make-admin.js
+└── README.md
+📜 License
+This project was developed for educational purposes as part of the Web Programming course at Bitlis Eren University.
 
-# Yazılara slug ekle (migrasyon)
-node backend/migrate-slugs.js
-⚙️ Ortam Değişkenleri
-Değişken	Açıklama	Varsayılan
-PORT	Backend portu	5000
-MONGODB_URI	MongoDB bağlantısı	mongodb://localhost:27017/blogdb
-JWT_SECRET	JWT imza anahtarı	zorunlu
+You are free to modify and extend it for learning or personal use.
