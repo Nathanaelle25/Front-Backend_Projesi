@@ -1,4 +1,5 @@
-BEUBlog
+WebProgramlama
+📦 BEUBlog
 
 Modern, full-stack blog platformu. React frontend ve Node.js/Express backend ile geliştirilmiş, Docker üzerinden kolayca deploy edilebilir.
 
